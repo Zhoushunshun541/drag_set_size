@@ -2,9 +2,8 @@
   <div
     v-clickout
     class=" drag-size award-content-show editor-award stamp"
-    ref="editorstamp"
+    :ref="id + 'ref'"
     :class="setClass"
-    :style="{ left: value.x + 'px', top: value.y + 'px' }"
   >
     <div @mousedown="setDomSize($event, 1)" class="set-size left-top"></div>
     <div @mousedown="setDomSize($event, 2)" class="set-size top"></div>
@@ -65,6 +64,10 @@ export default {
     }
   },
   methods: {
+    setPosition() {
+      this.$refs[this.id + 'ref'].style.left = this.value.x + 'px'
+      this.$refs[this.id + 'ref'].style.top = this.value.y + 'px'
+    },
     // 删除图片
     toDeleteImg() {
       this.$emit('on-delete-img')
@@ -74,6 +77,7 @@ export default {
      */
     moveStamp(element) {
       if (!this.disabled) {
+        let mine = this.$refs[this.id + 'ref'].style
         this.setClass = 'stamp-size-style'
         // 监听鼠标左键的时间
         if (element.button == 0) {
@@ -100,15 +104,21 @@ export default {
             ) {
               this.value.y = top
               this.value.x = left
+              mine.top = top + 'px'
+              mine.left = left + 'px'
             }
             // 这里限制范围的同时  可以让其在范围外根据合理范围移动
             // 左上角
             if (top <= 0 && left <= 0) {
               this.value.y = 0
               this.value.x = 0
+              mine.top = 0
+              mine.left = 0
             } else if (top <= 0 && left >= 0) {
               this.value.y = 0
               this.value.x = left
+              mine.top = 0
+              mine.left = left + 'px'
             }
             // 左下角
             if (
@@ -117,6 +127,9 @@ export default {
             ) {
               this.value.y = 0
               this.value.x = this.limitRange.width - element.target.offsetWidth
+              mine.top = 0
+              mine.left =
+                this.limitRange.width - element.target.offsetWidth + 'px'
             } else if (
               top + element.target.offsetHeight >= this.limitRange.height &&
               left + element.target.offsetWidth <= this.limitRange.width
@@ -124,6 +137,9 @@ export default {
               this.value.y =
                 this.limitRange.height - element.target.offsetHeight
               this.value.x = left
+              mine.top =
+                this.limitRange.height - element.target.offsetHeight + 'px'
+              mine.left = left + 'px'
             }
             // 右上角
             if (
@@ -133,15 +149,23 @@ export default {
               this.value.y =
                 this.limitRange.height - element.target.offsetHeight
               this.value.x = 0
+              mine.top =
+                this.limitRange.height - element.target.offsetHeight + 'px'
+              mine.left = 0
             } else if (left <= 0 && top >= 0) {
               this.value.y = top
               this.value.x = 0
+              mine.top = top + 'px'
+              mine.left = 0
             } else if (
               left + element.target.offsetWidth >= this.limitRange.width &&
               top >= 0
             ) {
               this.value.y = top
               this.value.x = this.limitRange.width - element.target.offsetWidth
+              mine.top = top + 'px'
+              mine.left =
+                this.limitRange.width - element.target.offsetWidth + 'px'
             }
             // 右下角
             if (
@@ -151,6 +175,10 @@ export default {
               this.value.y =
                 this.limitRange.height - element.target.offsetHeight
               this.value.x = this.limitRange.width - element.target.offsetWidth
+              mine.top =
+                this.limitRange.height - element.target.offsetHeight + 'px'
+              mine.left =
+                this.limitRange.width - element.target.offsetWidth + 'px'
             }
           }
           document.onmouseup = () => {
@@ -175,6 +203,7 @@ export default {
     // 设置大小
     setDomSize(element, type) {
       if (!this.disabled) {
+        let mine = this.$refs[this.id + 'ref'].style
         // 监听鼠标左键的事件
         if (element.button == 0) {
           // 获取鼠标相对于点击元素的位置
@@ -202,6 +231,8 @@ export default {
                   this.value.w += this.value.x - left
                   this.value.y = top
                   this.value.x = left
+                  mine.top = top + 'px'
+                  mine.left = left + 'px'
                 }
 
                 break
@@ -209,6 +240,7 @@ export default {
                 if (top >= 0 && top < this.value.y + this.value.h - 30) {
                   this.value.h += this.value.y - top
                   this.value.y = top
+                  mine.top = top + 'px'
                 }
                 break
               case 3:
@@ -221,6 +253,7 @@ export default {
                   this.value.h += this.value.y - top
                   this.value.w = left - this.value.x
                   this.value.y = top
+                  mine.top = top + 'px'
                 }
                 break
               case 4:
@@ -254,12 +287,14 @@ export default {
                   this.value.h = top - this.value.y
                   this.value.w -= left - this.value.x
                   this.value.x = left
+                  mine.left = left + 'px'
                 }
                 break
               case 8:
                 if (left >= 0 && left < this.value.x + this.value.w - 30) {
                   this.value.w -= left - this.value.x
                   this.value.x = left
+                  mine.left = left + 'px'
                 }
                 break
             }
@@ -296,6 +331,7 @@ export default {
   },
   mounted() {
     this.getParentDomLimitRange()
+    this.setPosition()
   },
   // 退出时候移除
   destroyed() {
