@@ -1,4 +1,4 @@
-import dragSize from './components/dragSize.vue'
+import dragSize from './components/drag_size.vue'
 
 const components = [dragSize]
 

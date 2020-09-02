@@ -14,7 +14,7 @@
     <div @mousedown="setDomSize($event, 6)" class="set-size bottom"></div>
     <div @mousedown="setDomSize($event, 7)" class="set-size left-bottom"></div>
     <div @mousedown="setDomSize($event, 8)" class="set-size left"></div>
-    <div @click="deleteImg" class="delete-img">删除</div>
+    <div @click="toDeleteImg" v-if="deleteImg" class="delete-img">删除</div>
     <img
       :id="id"
       ref="dragImg"
@@ -30,6 +30,7 @@
 
 <script>
 export default {
+  name: 'dragSize',
   props: {
     value: {
       type: Object,
@@ -40,6 +41,10 @@ export default {
       default: 'dragImg',
     },
     disabled: {
+      type: Boolean,
+      default: false,
+    },
+    deleteImg: {
       type: Boolean,
       default: false,
     },
@@ -64,8 +69,13 @@ export default {
   },
   methods: {
     // 删除图片
-    deleteImg() {
-      this.$emit('deleteImg')
+    toDeleteImg() {
+      try {
+        this.$emit('on-delete-img')
+      } catch (error) {
+        console.log(error)
+        new Error('请绑定 on-delete-img 事件进行操作')
+      }
     },
     /**
      * @description: 拖动印章的方法
@@ -303,7 +313,7 @@ export default {
     }
   },
   // 自定义指令
-  directive: {
+  directives: {
     clickout: {
       bind(el) {
         function documentHandler(e) {

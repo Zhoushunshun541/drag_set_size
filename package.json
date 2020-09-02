@@ -1,5 +1,5 @@
 {
-  "name": "drag_set_size",
+  "name": "drag_size",
   "description": "图片拖动插件",
   "author": "周顺顺",
   "bugs": "https://github.com/Zhoushunshun541/drag_set_size",
@@ -9,14 +9,14 @@
     "build": "vue-cli-service build --target lib --dest lib ./src/index.js",
     "lint": "vue-cli-service lint"
   },
-  "main": "lib/drag_set_size.common.js",
+  "main": "lib/drag_size.common.js",
   "files": [
     "lib",
     "src"
   ],
   "repository": {
     "type": "git",
-    "url": "https://github.com/Zhoushunshun541/sign_name"
+    "url": "https://github.com/Zhoushunshun541/drag_set_size"
   },
   "dependencies": {
     "core-js": "^3.6.5",
