@@ -71,10 +71,13 @@ export default {
     // 删除图片
     toDeleteImg() {
       try {
+        console.log(this.$emit('on-delete-img'))
         this.$emit('on-delete-img')
       } catch (error) {
-        console.log(error)
-        new Error('请绑定 on-delete-img 事件进行操作')
+        console.log(
+          '%c请绑定 on-delete-img 事件进行删除操作',
+          'background:#D84D36 ; padding: 5px; border-radius:3px;  color: #fff'
+        )
       }
     },
     /**
@@ -291,11 +294,10 @@ export default {
     // 根据传值设置拖动的文件范围
     getParentDomLimitRange() {
       let dom = document.getElementById(this.limitRangeId)
+      dom = dom ? dom : document.body
       dom.style.position = 'relative'
       // 判断是否挂载到指定的节点
-      if (this.limitRangeId != '') {
-        dom.appendChild(this.$el)
-      }
+      dom.appendChild(this.$el)
       this.limitRange.width = dom.scrollWidth
       this.limitRange.height = dom.scrollHeight
       // 获取当前dom到视图内容的top  left  宝藏api
