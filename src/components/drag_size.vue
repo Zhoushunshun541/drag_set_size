@@ -3,7 +3,7 @@
     v-clickout
     class=" drag-size award-content-show editor-award stamp"
     ref="editorstamp"
-    :class="value.setSize"
+    :class="setClass"
     :style="{ left: value.x + 'px', top: value.y + 'px' }"
   >
     <div @mousedown="setDomSize($event, 1)" class="set-size left-top"></div>
@@ -18,7 +18,7 @@
     <img
       :id="id"
       ref="dragImg"
-      :src="imgUrl"
+      :src="value.url"
       @load="getImgWH"
       @mousedown="moveStamp"
       :height="value.h"
@@ -48,10 +48,6 @@ export default {
       type: Boolean,
       default: false,
     },
-    imgUrl: {
-      type: String,
-      default: '',
-    },
     limitRangeId: {
       type: String,
       default: '',
@@ -59,6 +55,7 @@ export default {
   },
   data() {
     return {
+      setClass: '',
       limitRange: {
         width: 0,
         height: 0,
@@ -70,22 +67,14 @@ export default {
   methods: {
     // 删除图片
     toDeleteImg() {
-      try {
-        console.log(this.$emit('on-delete-img'))
-        this.$emit('on-delete-img')
-      } catch (error) {
-        console.log(
-          '%c请绑定 on-delete-img 事件进行删除操作',
-          'background:#D84D36 ; padding: 5px; border-radius:3px;  color: #fff'
-        )
-      }
+      this.$emit('on-delete-img')
     },
     /**
      * @description: 拖动印章的方法
      */
     moveStamp(element) {
       if (!this.disabled) {
-        this.value.setSize = 'stamp-size-style'
+        this.setClass = 'stamp-size-style'
         // 监听鼠标左键的时间
         if (element.button == 0) {
           // 获取鼠标相对于点击元素的位置
@@ -165,7 +154,7 @@ export default {
             }
           }
           document.onmouseup = () => {
-            this.value.setSize = ''
+            this.setClass = ''
             document.onmousemove = null
             document.onmouseup = null
           }
@@ -276,7 +265,7 @@ export default {
             }
           }
           document.onmouseup = () => {
-            this.value.setSize = ''
+            this.setClass = ''
             document.onmousemove = null
             document.onmouseup = null
           }
@@ -354,6 +343,11 @@ export default {
         document.removeEventListener('click', el.__vueClickOutside__)
         delete el.__vueClickOutside__
       },
+    },
+  },
+  watch: {
+    limitRangeId: function() {
+      this.getParentDomLimitRange()
     },
   },
 }
