@@ -3,7 +3,7 @@
     v-clickout
     class=" drag-size award-content-show editor-award stamp"
     ref="editorstamp"
-    :class="value.setSize"
+    :class="setClass"
     :style="{ left: value.x + 'px', top: value.y + 'px' }"
   >
     <div @mousedown="setDomSize($event, 1)" class="set-size left-top"></div>
@@ -14,11 +14,11 @@
     <div @mousedown="setDomSize($event, 6)" class="set-size bottom"></div>
     <div @mousedown="setDomSize($event, 7)" class="set-size left-bottom"></div>
     <div @mousedown="setDomSize($event, 8)" class="set-size left"></div>
-    <div @click="deleteImg" class="delete-img">删除</div>
+    <div @click="toDeleteImg" v-if="deleteImg" class="delete-img">删除</div>
     <img
       :id="id"
       ref="dragImg"
-      :src="imgUrl"
+      :src="value.url"
       @load="getImgWH"
       @mousedown="moveStamp"
       :height="value.h"
@@ -30,6 +30,7 @@
 
 <script>
 export default {
+  name: 'dragSize',
   props: {
     value: {
       type: Object,
@@ -43,9 +44,9 @@ export default {
       type: Boolean,
       default: false,
     },
-    imgUrl: {
-      type: String,
-      default: '',
+    deleteImg: {
+      type: Boolean,
+      default: false,
     },
     limitRangeId: {
       type: String,
@@ -54,6 +55,7 @@ export default {
   },
   data() {
     return {
+      setClass: '',
       limitRange: {
         width: 0,
         height: 0,
@@ -64,15 +66,15 @@ export default {
   },
   methods: {
     // 删除图片
-    deleteImg() {
-      this.$emit('deleteImg')
+    toDeleteImg() {
+      this.$emit('on-delete-img')
     },
     /**
      * @description: 拖动印章的方法
      */
     moveStamp(element) {
       if (!this.disabled) {
-        this.value.setSize = 'stamp-size-style'
+        this.setClass = 'stamp-size-style'
         // 监听鼠标左键的时间
         if (element.button == 0) {
           // 获取鼠标相对于点击元素的位置
@@ -152,7 +154,7 @@ export default {
             }
           }
           document.onmouseup = () => {
-            this.value.setSize = ''
+            this.setClass = ''
             document.onmousemove = null
             document.onmouseup = null
           }
@@ -263,7 +265,7 @@ export default {
             }
           }
           document.onmouseup = () => {
-            this.value.setSize = ''
+            this.setClass = ''
             document.onmousemove = null
             document.onmouseup = null
           }
@@ -281,11 +283,10 @@ export default {
     // 根据传值设置拖动的文件范围
     getParentDomLimitRange() {
       let dom = document.getElementById(this.limitRangeId)
+      dom = dom ? dom : document.body
       dom.style.position = 'relative'
       // 判断是否挂载到指定的节点
-      if (this.limitRangeId != '') {
-        dom.appendChild(this.$el)
-      }
+      dom.appendChild(this.$el)
       this.limitRange.width = dom.scrollWidth
       this.limitRange.height = dom.scrollHeight
       // 获取当前dom到视图内容的top  left  宝藏api
@@ -303,7 +304,7 @@ export default {
     }
   },
   // 自定义指令
-  directive: {
+  directives: {
     clickout: {
       bind(el) {
         function documentHandler(e) {
@@ -342,6 +343,11 @@ export default {
         document.removeEventListener('click', el.__vueClickOutside__)
         delete el.__vueClickOutside__
       },
+    },
+  },
+  watch: {
+    limitRangeId: function() {
+      this.getParentDomLimitRange()
     },
   },
 }
