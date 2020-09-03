@@ -42,7 +42,7 @@ mounted() {  //获取指定dom滚动距离的例子  具体根据实际情况进
   },
 ```
 
-![image-20200903113917311](/Users/idiotic/Library/Application Support/typora-user-images/image-20200903113917311.png)
+![image-20200903130804282](https://i.loli.net/2020/09/03/UQxy43wFGDameLo.png)
 
 ### 说明文档 -- 事件
 
