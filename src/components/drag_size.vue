@@ -39,6 +39,14 @@ export default {
       type: String,
       default: 'dragImg',
     },
+    scrollTop: {
+      type: Number,
+      default: 0,
+    },
+    scrollLeft: {
+      type: Number,
+      default: 0,
+    },
     disabled: {
       type: Boolean,
       default: false,
@@ -90,8 +98,8 @@ export default {
             let mouseY = e.clientY
             //鼠标按下并移动的事件
             //用鼠标的位置减去鼠标相对元素的位置  再减去图片的位置，得到元素的位置
-            let left = mouseX - ox - this.limitRange.x
-            let top = mouseY - oy - this.limitRange.y
+            let left = mouseX - ox - this.limitRange.x + this.scrollLeft
+            let top = mouseY - oy - this.limitRange.y + this.scrollTop
             this.value.w = element.target.offsetWidth
             this.value.h = element.target.offsetHeight
 
@@ -215,8 +223,8 @@ export default {
             let mouseY = e.clientY
             //鼠标按下并移动的事件
             //用鼠标的位置减去鼠标相对元素的位置  再减去图片的位置，得到元素的位置
-            let left = mouseX - ox - this.limitRange.x
-            let top = mouseY - oy - this.limitRange.y
+            let left = mouseX - ox - this.limitRange.x + this.scrollLeft
+            let top = mouseY - oy - this.limitRange.y + this.scrollTop
 
             switch (type) {
               case 1:
