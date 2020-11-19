@@ -335,6 +335,12 @@ export default {
     // 根据传值设置拖动的文件范围
     getParentDomLimitRange() {
       let dom = document.getElementById(this.limitRangeId)
+      if (dom == null) {
+        setInterval(() => {
+          this.getParentDomLimitRange()
+        }, 500)
+        return
+      }
       dom = dom ? dom : document.body
       dom.style.position = 'relative'
       // 判断是否挂载到指定的节点
