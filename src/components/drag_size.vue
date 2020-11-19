@@ -385,8 +385,9 @@ export default {
           } else {
             child.forEach((res) => {
               if (
-                res.classList.value.indexOf('set-size') > -1 ||
-                res.classList.value.indexOf('delete-img') > -1
+                res.classList.value &&
+                (res.classList.value.indexOf('set-size') > -1 ||
+                  res.classList.value.indexOf('delete-img') > -1)
               ) {
                 res.style.display = 'none'
               }
