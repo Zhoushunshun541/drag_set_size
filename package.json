@@ -3,7 +3,7 @@
   "description": "图片拖动插件",
   "author": "周顺顺",
   "bugs": "https://github.com/Zhoushunshun541/drag_size",
-  "version": "1.1.1",
+  "version": "1.1.2",
   "scripts": {
     "serve": "vue-cli-service serve",
     "build": "vue-cli-service build --target lib --dest lib ./src/index.js",

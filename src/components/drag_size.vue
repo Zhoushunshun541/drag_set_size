@@ -15,14 +15,7 @@
     <div @mousedown="setDomSize($event, 6)" class="set-size bottom"></div>
     <div @mousedown="setDomSize($event, 7)" class="set-size left-bottom"></div>
     <div @mousedown="setDomSize($event, 8)" class="set-size left"></div>
-    <div
-      @click="toDeleteImg"
-      :class="type == 1 ? 'type1' : type == 2 ? 'type2' : 'type3'"
-      v-if="deleteImg"
-      class="delete-img"
-    >
-      删除
-    </div>
+    <div @click="toDeleteImg" v-if="deleteImg" class="delete-img">删除</div>
     <img
       :id="id"
       ref="dragImg"
@@ -335,12 +328,6 @@ export default {
     // 根据传值设置拖动的文件范围
     getParentDomLimitRange() {
       let dom = document.getElementById(this.limitRangeId)
-      if (dom == null) {
-        setInterval(() => {
-          this.getParentDomLimitRange()
-        }, 500)
-        return
-      }
       dom = dom ? dom : document.body
       dom.style.position = 'relative'
       // 判断是否挂载到指定的节点
@@ -373,9 +360,8 @@ export default {
             child.forEach((res) => {
               //  控制8个子div显示隐藏
               if (
-                res.classList.value &&
-                (res.classList.value.indexOf('set-size') > -1 ||
-                  res.classList.value.indexOf('delete-img') > -1)
+                res.classList.value.indexOf('set-size') > -1 ||
+                res.classList.value.indexOf('delete-img') > -1
               ) {
                 res.style.display = 'block'
               }
@@ -385,9 +371,8 @@ export default {
           } else {
             child.forEach((res) => {
               if (
-                res.classList.value &&
-                (res.classList.value.indexOf('set-size') > -1 ||
-                  res.classList.value.indexOf('delete-img') > -1)
+                res.classList.value.indexOf('set-size') > -1 ||
+                res.classList.value.indexOf('delete-img') > -1
               ) {
                 res.style.display = 'none'
               }
