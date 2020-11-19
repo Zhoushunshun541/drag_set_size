@@ -5,6 +5,8 @@
     :ref="id + 'ref'"
     :class="setClass"
   >
+    <template v-if="type == 1"></template>
+    <template v-if="type == 2"></template>
     <div @mousedown="setDomSize($event, 1)" class="set-size left-top"></div>
     <div @mousedown="setDomSize($event, 2)" class="set-size top"></div>
     <div @mousedown="setDomSize($event, 3)" class="set-size right-top"></div>
@@ -13,7 +15,14 @@
     <div @mousedown="setDomSize($event, 6)" class="set-size bottom"></div>
     <div @mousedown="setDomSize($event, 7)" class="set-size left-bottom"></div>
     <div @mousedown="setDomSize($event, 8)" class="set-size left"></div>
-    <div @click="toDeleteImg" v-if="deleteImg" class="delete-img">删除</div>
+    <div
+      @click="toDeleteImg"
+      :class="type == 1 ? 'type1' : type == 2 ? 'type2' : 'type3'"
+      v-if="deleteImg"
+      class="delete-img"
+    >
+      删除
+    </div>
     <img
       :id="id"
       ref="dragImg"
@@ -358,8 +367,9 @@ export default {
             child.forEach((res) => {
               //  控制8个子div显示隐藏
               if (
-                res.classList.value.indexOf('set-size') > -1 ||
-                res.classList.value.indexOf('delete-img') > -1
+                res.classList.value &&
+                (res.classList.value.indexOf('set-size') > -1 ||
+                  res.classList.value.indexOf('delete-img') > -1)
               ) {
                 res.style.display = 'block'
               }
